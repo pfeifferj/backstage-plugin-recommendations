@@ -11,3 +11,15 @@ Your plugin has been added to the example app in this repository, meaning you'll
 You can also serve the plugin in isolation by running `yarn start` in the plugin directory.
 This method of serving the plugin provides quicker iteration speed and a faster startup and hot reloads.
 It is only meant for local development, and the setup for it can be found inside the [/dev](./dev) directory.
+
+1. Configure the plugin in your `app-config.yaml`:
+
+The following is the minimum configuration required:
+
+```yaml
+# app-config.yaml
+app:
+  recommendations:
+    recommendationsapi: https://example.com/recs
+    feedbackapi: https://example.com/feedback
+```

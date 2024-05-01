@@ -10,6 +10,7 @@ import useAsync from "react-use/lib/useAsync";
 import IconButton from "@material-ui/core/IconButton";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
+import { useApi, configApiRef } from "@backstage/core-plugin-api";
 
 const useStyles = makeStyles({
   description: {
@@ -82,8 +83,14 @@ export const DenseTable = ({ templates, onFeedback }: DenseTableProps) => {
 };
 
 export const RecommendationsComponent = () => {
+  const config = useApi(configApiRef);
+  const recommendationsApi = config.getString(
+    "app.recommendations.recommendationsapi"
+  );
+  const feedbackApi = config.getString("app.recommendations.feedbackapi");
+
   const { value, loading, error } = useAsync(async (): Promise<Template[]> => {
-    const response = await fetch("/api/recommendations"); // external API
+    const response = await fetch(recommendationsApi);
     return await response.json();
   }, []);
 
@@ -92,8 +99,7 @@ export const RecommendationsComponent = () => {
     feedback: "thumbsUp" | "thumbsDown"
   ) => {
     try {
-      await fetch("/api/feedback", {
-        // external API
+      await fetch(feedbackApi, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
